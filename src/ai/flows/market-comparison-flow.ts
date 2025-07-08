@@ -19,7 +19,7 @@ const ComparePropertyToMarketInputSchema = z.object({
 export type ComparePropertyToMarketInput = z.infer<typeof ComparePropertyToMarketInputSchema>;
 
 const ComparePropertyToMarketOutputSchema = z.object({
-  comparisonSummary: z.string().describe('A summary comparing the property to similar properties in the area, highlighting its relative value.'),
+  comparisonSummary: z.string().describe("A summary comparing the property to similar properties in the area, highlighting its relative value. All prices should be in Nigerian Naira (NGN) with the '₦' symbol."),
   confidenceScore: z.number().describe('A confidence score for the comparison summary, indicating the reliability of the assessment.'),
 });
 export type ComparePropertyToMarketOutput = z.infer<typeof ComparePropertyToMarketOutputSchema>;
@@ -34,7 +34,7 @@ const prompt = ai.definePrompt({
   output: {schema: ComparePropertyToMarketOutputSchema},
   prompt: `You are a real estate expert providing insights into property values.
 
-You will analyze the provided property details, its predicted price, and market data of comparable properties to generate a comparison summary.
+You will analyze the provided property details, its predicted price, and market data of comparable properties to generate a comparison summary. All prices mentioned must be in Nigerian Naira (NGN) and use the '₦' symbol.
 
 Property Details: {{{propertyDetails}}}
 Predicted Price: {{{predictedPrice}}}
@@ -42,7 +42,7 @@ Market Data: {{{marketData}}}
 
 Based on this information, provide a comparison summary that highlights the property's relative value compared to similar properties in the area. Include a confidence score (0-1) for the comparison summary.
 
-Comparison Summary:`, // Changed to Comparison Summary:
+Comparison Summary:`,
 });
 
 const comparePropertyToMarketFlow = ai.defineFlow(
