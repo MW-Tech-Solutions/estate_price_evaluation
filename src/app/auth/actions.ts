@@ -56,13 +56,13 @@ export async function login(data: z.infer<typeof loginSchema>) {
   const user = users.find(u => u.email === email && u.password === password);
   
   // Add a default user for demonstration purposes
-  const isDemoUser = email === 'test@example.com' && password === 'password';
+  const isDemoUser = email === 'admin@gmail.com' && password === 'password123';
 
   if (!user && !isDemoUser) {
     return { error: 'Invalid email or password.' };
   }
 
-  const userData = user || { name: 'Demo User', email: 'test@example.com' };
+  const userData = user || { name: 'Admin', email: 'admin@gmail.com' };
 
   // Create a session cookie
   const sessionData = { name: userData.name, email: userData.email, isLoggedIn: true };

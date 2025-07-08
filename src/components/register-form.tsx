@@ -18,7 +18,7 @@ import { Loader2 } from "lucide-react";
 import { signup } from "@/app/auth/actions";
 import { useToast } from "@/hooks/use-toast";
 import Link from "next/link";
-import { useState } from "react";
+import { useTransition } from "react";
 
 const formSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters."),
@@ -27,7 +27,7 @@ const formSchema = z.object({
 });
 
 export function RegisterForm() {
-    const [isLoading, setIsLoading] = useState(false);
+    const [isPending, startTransition] = useTransition();
     const { toast } = useToast();
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -38,9 +38,8 @@ export function RegisterForm() {
         },
     });
 
-    async function onSubmit(values: z.infer<typeof formSchema>) {
-        setIsLoading(true);
-        try {
+    function onSubmit(values: z.infer<typeof formSchema>) {
+        startTransition(async () => {
             const result = await signup(values);
             if (result?.error) {
                 toast({
@@ -49,15 +48,7 @@ export function RegisterForm() {
                     description: result.error,
                 });
             }
-        } catch (error) {
-            toast({
-                variant: "destructive",
-                title: "Registration Failed",
-                description: "An unexpected error occurred. Please try again.",
-            });
-        } finally {
-            setIsLoading(false);
-        }
+        });
     }
 
     return (
@@ -110,8 +101,8 @@ export function RegisterForm() {
                 />
             </CardContent>
             <CardFooter className="flex flex-col gap-4">
-                <Button type="submit" disabled={isLoading} className="w-full">
-                    {isLoading ? (
+                <Button type="submit" disabled={isPending} className="w-full">
+                    {isPending ? (
                     <>
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                         Creating Account...
