@@ -38,24 +38,23 @@ export function LoginForm() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
-    try {
-      const result = await login(values);
-      if (result?.error) {
-        toast({
-          variant: "destructive",
-          title: "Login Failed",
-          description: result.error,
-        });
-      }
-    } catch (error) {
-        toast({
-            variant: "destructive",
-            title: "Login Failed",
-            description: "An unexpected error occurred. Please try again.",
-        });
-    } finally {
-      setIsLoading(false);
+    
+    // The `login` server action redirects on success by throwing a special error.
+    // We don't wrap this in a try/catch so that Next.js can handle the redirect.
+    // The action only returns a value if there's an error.
+    const result = await login(values);
+
+    if (result?.error) {
+      toast({
+        variant: "destructive",
+        title: "Login Failed",
+        description: result.error,
+      });
     }
+    
+    // This will only be reached if the login fails, as a successful login
+    // will cause the page to redirect and this component to unmount.
+    setIsLoading(false);
   }
 
   return (
