@@ -30,19 +30,20 @@ export interface EvaluationResult {
 export async function getEvaluation(input: PropertyFormData): Promise<EvaluationResult> {
     const validatedInput = formSchema.parse(input);
 
-    // 1. Mock price prediction
-    const predictedPrice = validatedInput.sizeSqft * 250 + validatedInput.numRooms * 15000 + validatedInput.numBathrooms * 7500 + (validatedInput.amenities.length * 100);
+    // 1. Mock price prediction in Naira
+    const predictedPrice = validatedInput.sizeSqft * 150000 + validatedInput.numRooms * 5000000 + validatedInput.numBathrooms * 2500000 + (validatedInput.amenities.length * 100000);
 
-    const propertyDetailsString = `A ${validatedInput.sizeSqft} sqft property with ${validatedInput.numRooms} rooms and ${validatedInput.numBathrooms} bathrooms, located in ${validatedInput.location}. Amenities include: ${validatedInput.amenities}.`;
+    const propertyLocation = `${validatedInput.location}, Adamawa State, Nigeria`;
+    const propertyDetailsString = `A ${validatedInput.sizeSqft} sqft property with ${validatedInput.numRooms} rooms and ${validatedInput.numBathrooms} bathrooms, located in ${propertyLocation}. Amenities include: ${validatedInput.amenities}.`;
 
-    // 2. Mock market data for comparison
-    const mockMarketData = `Comparable properties recently sold in ${validatedInput.location}:
-- A ${validatedInput.sizeSqft - 50 > 100 ? validatedInput.sizeSqft - 50 : 100} sqft property with ${validatedInput.numRooms} rooms sold for $${(predictedPrice - 10000).toLocaleString()}.
-- A ${validatedInput.sizeSqft + 50} sqft property with ${validatedInput.numRooms + 1} rooms sold for $${(predictedPrice + 25000).toLocaleString()}.
-- The average price for a ${validatedInput.numRooms}-room property in this neighborhood is approximately $${(predictedPrice + 5000).toLocaleString()}.`;
+    // 2. Mock market data for comparison in Adamawa State
+    const mockMarketData = `Comparable properties recently sold in Adamawa State, Nigeria:
+- A ${validatedInput.sizeSqft - 50 > 100 ? validatedInput.sizeSqft - 50 : 100} sqft property with ${validatedInput.numRooms} rooms sold for ₦${(predictedPrice - 2000000).toLocaleString()}.
+- A ${validatedInput.sizeSqft + 50} sqft property with ${validatedInput.numRooms + 1} rooms sold for ₦${(predictedPrice + 5000000).toLocaleString()}.
+- The average price for a ${validatedInput.numRooms}-room property in this neighborhood is approximately ₦${(predictedPrice + 1000000).toLocaleString()}.`;
     
     const genkitDescriptionInput: GeneratePropertyDescriptionInput = {
-        location: validatedInput.location,
+        location: propertyLocation,
         sizeSqft: validatedInput.sizeSqft,
         numRooms: validatedInput.numRooms,
         numBathrooms: validatedInput.numBathrooms,

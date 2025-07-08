@@ -35,11 +35,11 @@ export function PropertyForm({ onSubmit, isLoading }: PropertyFormProps) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      location: "",
+      location: "Yola",
       sizeSqft: 1200,
       numRooms: 3,
       numBathrooms: 2,
-      amenities: "Granite countertops, Hardwood floors, Fenced yard",
+      amenities: "Borehole, Standby generator, Air conditioning",
     },
   });
 
@@ -56,11 +56,11 @@ export function PropertyForm({ onSubmit, isLoading }: PropertyFormProps) {
               name="location"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Location</FormLabel>
+                  <FormLabel>Location (in Adamawa State)</FormLabel>
                   <div className="relative">
                     <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                     <FormControl>
-                      <Input placeholder="e.g., San Francisco, CA" {...field} className="pl-9" />
+                      <Input placeholder="e.g., Yola" {...field} className="pl-9" />
                     </FormControl>
                   </div>
                   <FormMessage />
